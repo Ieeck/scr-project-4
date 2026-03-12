@@ -10,8 +10,9 @@ from django.utils import timezone
 
 
 class TrainClass(models.Model):
-    name = models.TextField(primary_key=True, max_length=5)  # This field type is a guess.
-    double_unit = models.BooleanField(primary_key=True)  # This field type is a guess.
+    pk = models.CompositePrimaryKey('name', 'double_unit')
+    name = models.CharField(max_length=5)  # This field type is a guess.
+    double_unit = models.BooleanField(null=True)  # This field type is a guess.
     diesel = models.BooleanField(null=True)  # This field type is a guess.
     speed = models.IntegerField(null=True)  # This field type is a guess.
     carriages = models.IntegerField(null=True)  # This field type is a guess.
@@ -22,7 +23,7 @@ class TrainClass(models.Model):
 
 
 class Operator(models.Model):
-    name = models.TextField(primary_key=True, unique=True, max_length=16)  # This field type is a guess.
+    name = models.CharField(primary_key=True, unique=True, max_length=16)  # This field type is a guess.
 
     class Meta:
         managed = False
@@ -30,7 +31,7 @@ class Operator(models.Model):
 
 
 class Role(models.Model):
-    name = models.TextField(primary_key=True, unique=True, max_length=16)  # This field type is a guess.
+    name = models.CharField(primary_key=True, unique=True, max_length=16)  # This field type is a guess.
 
     class Meta:
         managed = False
@@ -38,7 +39,7 @@ class Role(models.Model):
 
 
 class Player(models.Model):
-    username = models.TextField(primary_key=True, unique=True, max_length=20)  # This field type is a guess.
+    username = models.CharField(primary_key=True, unique=True, max_length=20)  # This field type is a guess.
     current_role = models.ForeignKey(Role, on_delete=models.SET_DEFAULT, default='passenger')
 
     class Meta:
@@ -60,8 +61,8 @@ class Station(models.Model):
 class Route(models.Model):
     id = models.TextField(primary_key=True, unique=True, max_length=3)  # This field type is a guess.
     operator = models.ForeignKey(Operator, on_delete=models.PROTECT)  # This field type is a guess.
-    terminus1 = models.ForeignKey(Station, on_delete=models.CASCADE)  # This field type is a guess.
-    terminus2 = models.ForeignKey(Station, on_delete=models.CASCADE)  # This field type is a guess.
+    terminus1 = models.ForeignKey(Station, on_delete=models.CASCADE, related_name="route_terminus1")  # This field type is a guess.
+    terminus2 = models.ForeignKey(Station, on_delete=models.CASCADE, related_name="route_terminus2")  # This field type is a guess.
     diesel = models.BooleanField(null=True)  # This field type is a guess.
 
     class Meta:
@@ -81,9 +82,10 @@ class StationAssignment(models.Model):
 
 
 class Stops(models.Model):
-    route = models.ForeignKey(Route, primary_key=True, on_delete=models.CASCADE)  # This field type is a guess.
+    pk = models.CompositePrimaryKey('route', 'stop_order')
+    route = models.ForeignKey(Route, on_delete=models.CASCADE)  # This field type is a guess.
     station = models.ForeignKey(Station, on_delete=models.CASCADE)  # This field type is a guess.
-    stop_order = models.IntegerField(primary_key=True)  # This field type is a guess.
+    stop_order = models.IntegerField()  # This field type is a guess.
 
     class Meta:
         managed = False
@@ -91,10 +93,18 @@ class Stops(models.Model):
 
 
 class Unit(models.Model):
-    train_class = models.ForeignKey(TrainClass, db_column='class', primary_key=True, on_delete=models.CASCADE)  # Field renamed because it was a Python reserved word. This field type is a guess.
-    double_unit = models.ForeignKey(TrainClass, on_delete=models.CASCADE)  # This field type is a guess.
-    number = models.TextField(primary_key=True, max_length=2)  # This field type is a guess.
+    pk = models.CompositePrimaryKey('train_class', 'number')
+    train_class = models.ForeignKey(TrainClass, db_column='class', on_delete=models.CASCADE)  # Field renamed because it was a Python reserved word. This field type is a guess.
+    double_unit = models.ForeignKey(TrainClass, on_delete=models.CASCADE)
+    number = models.TextField(max_length=2)  # This field type is a guess.
     operator = models.ForeignKey(Operator, on_delete=models.PROTECT)  # This field type is a guess.
+
+    full_class = models.ForeignObject(
+        TrainClass,
+        on_delete=models.CASCADE,
+        from_fields=('train_class', 'double_unit'),
+        to_fields=('name', 'double_unit'),
+    )
 
     class Meta:
         managed = False
@@ -102,12 +112,19 @@ class Unit(models.Model):
 
 
 class TrainAssignment(models.Model):
-    id = models.AutoField(primary_key=True, unique=True)  # This field type is a guess.
-    player = models.ForeignKey(Player, on_delete=models.CASCADE, unique=True)  # This field type is a guess.
-    train_class = models.ForeignKey(Unit, on_delete=models.CASCADE)  # Field renamed because it was a Python reserved word. This field type is a guess.
-    number = models.ForeignKey(Unit, on_delete=models.CASCADE)  # This field type is a guess.
-    route = models.ForeignKey(Route, on_delete=models.CASCADE)  # This field type is a guess.
+    id = models.AutoField(db_column='id', primary_key=True, unique=True)  # This field type is a guess.
+    player = models.ForeignKey(Player, db_column='player', on_delete=models.CASCADE, unique=True)  # This field type is a guess.
+    train_class = models.ForeignKey(Unit, db_column='class', on_delete=models.CASCADE)
+    number = models.ForeignKey(Unit, db_column='number', on_delete=models.CASCADE)
+    route = models.ForeignKey(Route, db_column='route', on_delete=models.CASCADE)  # This field type is a guess.
     assign_time = models.TimeField(default=timezone.now())  # This field type is a guess.
+
+    full_unit = models.ForeignObject(
+        Unit,
+        on_delete=models.CASCADE,
+        from_fields=('train_class', 'number'),
+        to_fields=('train_class', 'number'),
+    )
 
     class Meta:
         managed = False

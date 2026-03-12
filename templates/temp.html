@@ -6,5 +6,11 @@
 </head>
 <body>
 <h1>so you got a thing...</h1>
+
+<ul>
+  {% for x in train_assignments %}
+    <li>{{ x.id }} {{ x.player.username }} {{ x.train_id.train_class.name }} {{ x.train_id.number }} {{ x.route }}</li>
+  {% endfor %}
+</ul>
 </body>
 </html>
