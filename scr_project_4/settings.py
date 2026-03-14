@@ -68,6 +68,10 @@ TEMPLATES = [
     },
 ]
 
+STATICFILES_DIRS = [
+    BASE_DIR / 'scr_project_4' / 'static'
+]
+
 WSGI_APPLICATION = 'scr_project_4.wsgi.application'
 
 
