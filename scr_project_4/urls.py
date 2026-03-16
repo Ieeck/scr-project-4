@@ -19,5 +19,5 @@ from . import views
 
 urlpatterns = [
     path('assignments/', views.assignments, name='assignments'),
-    path('assignments/<int:id>/delete', views.delete_assignment, name='delete_assignment'),
+    path('assignments/<int:id>/delete/', views.delete_assignment, name='delete_assignment'),
 ]
