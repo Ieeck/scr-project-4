@@ -72,9 +72,9 @@ class Route(models.Model):
 
 class StationAssignment(models.Model):
     id = models.AutoField(primary_key=True, unique=True)  # This field type is a guess.
-    player = models.ForeignKey(Player, on_delete=models.CASCADE, unique=True)  # This field type is a guess.
-    station = models.ForeignKey(Station, on_delete=models.CASCADE)  # This field type is a guess.
-    assign_time = models.TimeField(default=timezone.now())  # This field type is a guess.
+    player = models.ForeignKey(Player, db_column='player', on_delete=models.CASCADE, unique=True)  # This field type is a guess.
+    station = models.ForeignKey(Station, db_column='station', on_delete=models.CASCADE)  # This field type is a guess.
+    assign_time = models.TimeField(db_column='assign_time', default=timezone.now())  # This field type is a guess.
 
     class Meta:
         managed = False

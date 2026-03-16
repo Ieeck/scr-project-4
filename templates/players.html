@@ -1,0 +1,32 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Players</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+
+<div class="table"><table>
+    <tr>
+        <th>Username</th>
+        <th>Role</th>
+    </tr>
+
+    {% for x in players %}
+        <tr>
+            <td>{{ x.username }}</td>
+            <td>{{ x.current_role.name }}</td>
+            <td>
+                <form action="{% url 'delete_player' x.username %}" method='POST'>
+                    {% csrf_token %}
+                    <button>delete!</button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table></div>
+</body>
+</html>
