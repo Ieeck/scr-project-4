@@ -33,6 +33,9 @@ class Operator(models.Model):
 class Role(models.Model):
     name = models.CharField(primary_key=True, unique=True, max_length=16)  # This field type is a guess.
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         managed = False
         db_table = 'role'
@@ -41,6 +44,9 @@ class Role(models.Model):
 class Player(models.Model):
     username = models.CharField(primary_key=True, unique=True, max_length=20)  # This field type is a guess.
     current_role = models.ForeignKey(Role, db_column='current_role', on_delete=models.SET_DEFAULT, default='passenger')
+
+    def __str__(self):
+        return self.username
 
     class Meta:
         managed = False
@@ -64,6 +70,9 @@ class Route(models.Model):
     terminus1 = models.ForeignKey(Station, db_column='terminus1', on_delete=models.CASCADE, related_name="route_terminus1")  # This field type is a guess.
     terminus2 = models.ForeignKey(Station, db_column='terminus2', on_delete=models.CASCADE, related_name="route_terminus2")  # This field type is a guess.
     diesel = models.BooleanField(null=True)  # This field type is a guess.
+
+    def __str__(self):
+        return self.id
 
     class Meta:
         managed = False
@@ -97,7 +106,7 @@ class Unit(models.Model):
     train_class = models.TextField(db_column='class')  # hmph.
     double_unit = models.BooleanField()
     number = models.TextField(max_length=2)  # This field type is a guess.
-    operator = models.ForeignKey(Operator, on_delete=models.PROTECT)  # This field type is a guess.
+    operator = models.ForeignKey(Operator, db_column='operator', on_delete=models.PROTECT)  # This field type is a guess.
 
     full_class = models.ForeignObject(
         TrainClass,
@@ -105,6 +114,9 @@ class Unit(models.Model):
         from_fields=('train_class', 'double_unit'),
         to_fields=('name', 'double_unit'),
     )
+
+    def __str__(self):
+        return self.train_class + self.number
 
     class Meta:
         managed = False

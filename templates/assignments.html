@@ -17,6 +17,7 @@
         <th>Train Class</th>
         <th>Train Number</th>
         <th>Route</th>
+        <th>Assign Time</th>
     </tr>
 
     {% for x in train_assignments %}
@@ -27,6 +28,7 @@
             <td>{{ x.train_class }}</td>
             <td>{{ x.number }}</td>
             <td>{{ x.route }}</td>
+            <td>{{ x.assign_time }}</td>
             <td>
                 <form action="{% url 'delete_assignment' x.id %}" method='POST'>
                     {% csrf_token %}

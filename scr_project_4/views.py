@@ -18,6 +18,27 @@ def delete_assignment(request, id):
 
     return render(request, "assignments.html")
 
+def create_assignment(request):
+    if request.method == "GET":
+        template = loader.get_template('create_assignment.html')
+        context = {'form': AssignmentForm()}
+        return HttpResponse(template.render(context, request))
+
+    elif request.method == "POST":
+        form = AssignmentForm(request.POST)
+        if form.is_valid():
+            assignment = form.save(commit=False) # cause the unit needs to be split
+            unit = form.cleaned_data['unit']
+            assignment.train_class = unit.train_class
+            assignment.number = unit.number
+            assignment.save()
+            return HttpResponseRedirect("/assignments/")
+        else:
+            template = loader.get_template('create_assignment.html')
+            context = {'form': form}
+            return HttpResponse(template.render(context, request))
+
+
 def players(request):
     players_get = Player.objects.all()
     template = loader.get_template('players.html')

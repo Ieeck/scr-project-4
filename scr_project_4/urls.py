@@ -23,4 +23,5 @@ urlpatterns = [
     path('assignments/<int:id>/delete/', views.delete_assignment, name='delete_assignment'),
     path('players/<str:username>/delete/', views.delete_player, name='delete_player'),
     path('create_player/', views.create_player, name='create_player'),
+    path('create_assignment/', views.create_assignment, name='create_assignment'),
 ]
