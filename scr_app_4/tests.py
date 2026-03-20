@@ -20,7 +20,7 @@ class TestClass(TestCase):
         test_player.delete()
 
     def test_create_delete_assignment(self):
-        player = Player.objects.get(username='leeck_reflexive')  # or create one
+        player = Player.objects.get(username='leeck_reflexive')
         train_class = TrainClass.objects.get(name='185/1')
         unit = Unit.objects.get(number='45')
         route = Route.objects.get(id='051')
