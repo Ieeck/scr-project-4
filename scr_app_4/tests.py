@@ -15,22 +15,26 @@ class TestClass(TestCase):
         TrainAssignment.objects.all()
 
     def test_create_delete_player(self):
-        test_role = Role.objects.get(name='passenger')
+        test_role = Role.objects.create(name='role')
         test_player = Player.objects.create(username='test', current_role=test_role)
         test_player.delete()
 
     def test_create_delete_assignment(self):
-        player = Player.objects.get(username='leeck_reflexive')
-        train_class = TrainClass.objects.get(name='185/1')
-        unit = Unit.objects.get(number='45')
-        route = Route.objects.get(id='051')
+        test_role = Role.objects.create(name='role')
+        test_operator = Operator.objects.create(name='operator')
+        test_station = Station.objects.create(name='station', operator=test_operator)
+        test_player = Player.objects.create(username='test', current_role=test_role)
+        test_class = TrainClass.objects.create(name='185/1', double_unit=0)
+        test_unit = Unit.objects.create(train_class=test_class, double_unit=0, number='01', operator=test_operator)
+        test_route = Route.objects.create(id='001', operator=test_operator, terminus1=test_station, terminus2=test_station)
 
         assignment = TrainAssignment.objects.create(
-            player=player,
-            train_class=train_class,
-            unit=unit,
-            route=route
+            player=test_player,
+            train_class=test_class,
+            number=test_unit.number,
+            route=test_route
         )
+
         assignment.delete()
 
     # page tests
