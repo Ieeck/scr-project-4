@@ -26,12 +26,20 @@ def create_assignment(request):
 
     elif request.method == "POST":
         form = AssignmentForm(request.POST)
+        #if form.is_valid():
+        #    assignment = form.save(commit=False) # cause the unit needs to be split
+        #    unit = form.cleaned_data['unit']
+        #    assignment.train_class = unit.train_class
+        #    assignment.number = unit.number
+        #    assignment.save()
+        #    return HttpResponseRedirect("/assignments/")
+        #else:
+        #    template = loader.get_template('create_assignment.html')
+        #    context = {'form': form}
+        #    return HttpResponse(template.render(context, request))
+
         if form.is_valid():
-            assignment = form.save(commit=False) # cause the unit needs to be split
-            unit = form.cleaned_data['unit']
-            assignment.train_class = unit.train_class
-            assignment.number = unit.number
-            assignment.save()
+            form.save()
             return HttpResponseRedirect("/assignments/")
         else:
             template = loader.get_template('create_assignment.html')

@@ -10,7 +10,7 @@ from django.utils import timezone
 
 
 class TrainClass(models.Model):
-    pk = models.CompositePrimaryKey('name', 'double_unit')
+    id = models.AutoField(primary_key=True, unique=True)
     name = models.CharField(max_length=5)  # This field type is a guess.
     double_unit = models.BooleanField()  # This field type is a guess.
     diesel = models.BooleanField(null=True)  # This field type is a guess.
@@ -94,21 +94,10 @@ class Stops(models.Model):
 
 
 class Unit(models.Model):
-    pk = models.CompositePrimaryKey('train_class', 'number')
-    train_class = models.TextField(db_column='class')  # hmph.
-    double_unit = models.BooleanField()
-    number = models.TextField(max_length=2)  # This field type is a guess.
+    id = models.AutoField(db_column='id', primary_key=True, unique=True)
+    train_class = models.ForeignKey(TrainClass, on_delete=models.CASCADE, db_column='class', null=False)
+    number = models.TextField(null=False, max_length=2)  # This field type is a guess.
     operator = models.ForeignKey(Operator, db_column='operator', on_delete=models.PROTECT)  # This field type is a guess.
-
-    full_class = models.ForeignObject(
-        TrainClass,
-        on_delete=models.CASCADE,
-        from_fields=('train_class', 'double_unit'),
-        to_fields=('name', 'double_unit'),
-    )
-
-    def __str__(self):
-        return self.train_class + self.number
 
     class Meta:
         db_table = 'unit'
@@ -117,17 +106,9 @@ class Unit(models.Model):
 class TrainAssignment(models.Model):
     id = models.AutoField(db_column='id', primary_key=True, unique=True)  # This field type is a guess.
     player = models.ForeignKey(Player, db_column='player', on_delete=models.CASCADE, unique=True)  # This field type is a guess.
-    train_class = models.TextField(db_column='class')
-    number = models.TextField(db_column='number')
+    unit = models.ForeignKey(Unit, db_column='unit', on_delete=models.CASCADE)
     route = models.ForeignKey(Route, db_column='route', on_delete=models.CASCADE)  # This field type is a guess.
     assign_time = models.TimeField(default=timezone.now())  # This field type is a guess.
-
-    full_unit = models.ForeignObject(
-        Unit,
-        on_delete=models.CASCADE,
-        from_fields=('train_class', 'number'),
-        to_fields=('train_class', 'number'),
-    )
 
     class Meta:
         db_table = 'train_assignment'
