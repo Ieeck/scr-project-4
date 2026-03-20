@@ -51,7 +51,7 @@ class Player(models.Model):
 
 class Station(models.Model):
     name = models.TextField(primary_key=True, max_length=64)  # This field type is a guess.
-    operator = models.ForeignKey(Operator, on_delete=models.PROTECT)  # This field type is a guess.
+    operator = models.ForeignKey(Operator, null=True, on_delete=models.PROTECT)  # This field type is a guess.
     platforms = models.IntegerField(null=True)  # This field type is a guess.
     dispatchers = models.IntegerField(null=True)  # This field type is a guess.
 
@@ -61,9 +61,9 @@ class Station(models.Model):
 
 class Route(models.Model):
     id = models.TextField(primary_key=True, unique=True, max_length=3)  # This field type is a guess.
-    operator = models.ForeignKey(Operator, db_column='operator', on_delete=models.PROTECT)  # This field type is a guess.
-    terminus1 = models.ForeignKey(Station, db_column='terminus1', on_delete=models.CASCADE, related_name="route_terminus1")  # This field type is a guess.
-    terminus2 = models.ForeignKey(Station, db_column='terminus2', on_delete=models.CASCADE, related_name="route_terminus2")  # This field type is a guess.
+    operator = models.ForeignKey(Operator, null=True, db_column='operator', on_delete=models.PROTECT)  # This field type is a guess.
+    terminus1 = models.ForeignKey(Station, null=True, db_column='terminus1', on_delete=models.CASCADE, related_name="route_terminus1")  # This field type is a guess.
+    terminus2 = models.ForeignKey(Station, null=True, db_column='terminus2', on_delete=models.CASCADE, related_name="route_terminus2")  # This field type is a guess.
     diesel = models.BooleanField(null=True)  # This field type is a guess.
 
     def __str__(self):

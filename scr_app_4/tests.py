@@ -1,7 +1,9 @@
 from django.test import TestCase
+from django.db import connection
 from .models import *
 
 class TestClass(TestCase):
+
     def test_get_everything(self):
         TrainClass.objects.all()
         Operator.objects.all()
@@ -15,13 +17,14 @@ class TestClass(TestCase):
         TrainAssignment.objects.all()
 
     def test_create_delete_player(self):
-        test_role = Role.objects.get(name='passenger')
+        test_role = Role.objects.create(name='role')
         test_player = Player.objects.create(username='test', current_role=test_role)
         test_player.delete()
 
     def test_create_delete_assignment(self):
-        player = Player.objects.get(username='leeck_reflexive')
-        train_class = TrainClass.objects.get(name='185/1')
+        test_role = Role.objects.create(name='role')
+        test_player = Player.objects.create(username='test', current_role=test_role)
+        train_class = TrainClass.objects.create(name='100/0', double_unit=False, diesel, speed, carriages)
         unit = Unit.objects.get(number='45')
         route = Route.objects.get(id='051')
 
