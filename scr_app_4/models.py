@@ -18,7 +18,6 @@ class TrainClass(models.Model):
     carriages = models.IntegerField(null=True)  # This field type is a guess.
 
     class Meta:
-        managed = False
         db_table = 'class_table'
 
 
@@ -26,7 +25,6 @@ class Operator(models.Model):
     name = models.CharField(primary_key=True, unique=True, max_length=16)  # This field type is a guess.
 
     class Meta:
-        managed = False
         db_table = 'operator'
 
 
@@ -37,7 +35,6 @@ class Role(models.Model):
         return self.name
 
     class Meta:
-        managed = False
         db_table = 'role'
 
 
@@ -49,7 +46,6 @@ class Player(models.Model):
         return self.username
 
     class Meta:
-        managed = False
         db_table = 'player'
 
 
@@ -60,7 +56,6 @@ class Station(models.Model):
     dispatchers = models.IntegerField(null=True)  # This field type is a guess.
 
     class Meta:
-        managed = False
         db_table = 'station'
 
 
@@ -75,7 +70,6 @@ class Route(models.Model):
         return self.id
 
     class Meta:
-        managed = False
         db_table = 'route'
 
 
@@ -86,7 +80,6 @@ class StationAssignment(models.Model):
     assign_time = models.TimeField(db_column='assign_time', default=timezone.now())  # This field type is a guess.
 
     class Meta:
-        managed = False
         db_table = 'station_assignment'
 
 
@@ -97,7 +90,6 @@ class Stops(models.Model):
     stop_order = models.IntegerField()  # This field type is a guess.
 
     class Meta:
-        managed = False
         db_table = 'stops'
 
 
@@ -119,7 +111,6 @@ class Unit(models.Model):
         return self.train_class + self.number
 
     class Meta:
-        managed = False
         db_table = 'unit'
 
 
@@ -139,5 +130,4 @@ class TrainAssignment(models.Model):
     )
 
     class Meta:
-        managed = False
         db_table = 'train_assignment'
