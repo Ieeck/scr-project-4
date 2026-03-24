@@ -17,12 +17,18 @@ class TrainClass(models.Model):
     speed = models.IntegerField(null=True)  # This field type is a guess.
     carriages = models.IntegerField(null=True)  # This field type is a guess.
 
+    def __str__(self):
+        return self.name
+
     class Meta:
-        db_table = 'class_table'
+        db_table = 'class'
 
 
 class Operator(models.Model):
     name = models.CharField(primary_key=True, unique=True, max_length=16)  # This field type is a guess.
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         db_table = 'operator'
@@ -98,6 +104,9 @@ class Unit(models.Model):
     train_class = models.ForeignKey(TrainClass, on_delete=models.CASCADE, db_column='class', null=False)
     number = models.TextField(null=False, max_length=2)  # This field type is a guess.
     operator = models.ForeignKey(Operator, db_column='operator', on_delete=models.PROTECT)  # This field type is a guess.
+
+    def __str__(self):
+        return self.train_class.name + self.number
 
     class Meta:
         db_table = 'unit'

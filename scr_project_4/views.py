@@ -26,18 +26,6 @@ def create_assignment(request):
 
     elif request.method == "POST":
         form = AssignmentForm(request.POST)
-        #if form.is_valid():
-        #    assignment = form.save(commit=False) # cause the unit needs to be split
-        #    unit = form.cleaned_data['unit']
-        #    assignment.train_class = unit.train_class
-        #    assignment.number = unit.number
-        #    assignment.save()
-        #    return HttpResponseRedirect("/assignments/")
-        #else:
-        #    template = loader.get_template('create_assignment.html')
-        #    context = {'form': form}
-        #    return HttpResponse(template.render(context, request))
-
         if form.is_valid():
             form.save()
             return HttpResponseRedirect("/assignments/")
@@ -75,5 +63,36 @@ def create_player(request):
             return HttpResponseRedirect("/players/")
         else:
             template = loader.get_template('create_player.html')
+            context = {'form': form}
+            return HttpResponse(template.render(context, request))
+
+def units(request):
+    units_get = Unit.objects.all()
+    template = loader.get_template('units.html')
+    context = {'units': units_get}
+    return HttpResponse(template.render(context, request))
+
+def delete_unit(request, id):
+    unit = get_object_or_404(Unit, id=id)
+
+    if request.method == "POST":
+        unit.delete()
+        return HttpResponseRedirect("/units/")
+
+    return render(request, "units.html")
+
+def create_unit(request):
+    if request.method == "GET":
+        template = loader.get_template('create_unit.html')
+        context = {'form': UnitForm()}
+        return HttpResponse(template.render(context, request))
+
+    elif request.method == "POST":
+        form = UnitForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect("/units/")
+        else:
+            template = loader.get_template('create_unit.html')
             context = {'form': form}
             return HttpResponse(template.render(context, request))

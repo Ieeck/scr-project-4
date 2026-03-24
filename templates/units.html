@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Players</title>
+    <title>Units</title>
     <style>
         body {
             font-family: Helvetica, sans-serif;
@@ -19,6 +19,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+
+        .links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 10px;
+            margin: 10px
         }
 
         button {
@@ -36,22 +44,34 @@
 </head>
 <body>
 
+<div class="links">
+    <a href="{% url 'players' %}">To Players</a>
+</div>
+
+<div class="links">
+    <a href="{% url 'assignments' %}">To Assignments</a>
+</div>
+
+<div class="links">
+    <a href="{% url 'create_unit' %}">Create Unit</a>
+</div>
+
 <div class="table"><table>
     <tr>
         <th>Class</th>
-        <th>Double Unit?</th>
         <th>Number</th>
+        <th>Double Unit?</th>
         <th>Operator</th>
     </tr>
 
-    {% for x in players %}
+    {% for x in units %}
         <tr>
-            <td>{{ x.train_class }}</td>
-            <td>{{ x.double_unit }}</td>
+            <td>{{ x.train_class.name }}</td>
             <td>{{ x.number }}</td>
-            <td>{{ x.operator }}</td>
+            <td>{{ x.train_class.double_unit }}</td>
+            <td>{{ x.operator.name }}</td>
             <td>
-                <form action="{% url 'delete_train' x. %}" method='POST'>
+                <form action="{% url 'delete_unit' x.id %}" method='POST'>
                     {% csrf_token %}
                     <button>delete!</button>
                 </form>
