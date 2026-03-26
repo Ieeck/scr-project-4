@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
 from django.http import HttpResponse
 from django.template import loader
 from scr_app_4.forms import *
+# this is a comment!
 
 def assignments(request):
     train_assignments = TrainAssignment.objects.all()
