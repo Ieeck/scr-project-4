@@ -1,9 +1,7 @@
 from django.test import TestCase
-from django.db import connection
 from .models import *
 
 class TestClass(TestCase):
-
     def test_get_everything(self):
         TrainClass.objects.all()
         Operator.objects.all()
@@ -23,17 +21,20 @@ class TestClass(TestCase):
 
     def test_create_delete_assignment(self):
         test_role = Role.objects.create(name='role')
+        test_operator = Operator.objects.create(name='operator')
+        test_station = Station.objects.create(name='station', operator=test_operator)
         test_player = Player.objects.create(username='test', current_role=test_role)
-        train_class = TrainClass.objects.create(name='100/0', double_unit=False)
-        unit = Unit.objects.get(number='45')
-        route = Route.objects.get(id='051')
+        test_class = TrainClass.objects.create(name='185/1', double_unit=0)
+        test_unit = Unit.objects.create(train_class=test_class, double_unit=0, number='01', operator=test_operator)
+        test_route = Route.objects.create(id='001', operator=test_operator, terminus1=test_station, terminus2=test_station)
 
         assignment = TrainAssignment.objects.create(
             player=test_player,
-            train_class=train_class,
-            unit=unit,
-            route=route
+            train_class=test_class,
+            number=test_unit.number,
+            route=test_route
         )
+
         assignment.delete()
 
     # page tests

@@ -21,6 +21,14 @@
             align-items: center;
         }
 
+        .links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 10px;
+            margin: 10px
+        }
+
         button {
             font-family: Helvetica, sans-serif;
             font-size: 24px;
@@ -35,6 +43,18 @@
     </style>
 </head>
 <body>
+
+<div class="links">
+    <a href="{% url 'units' %}">To Units</a>
+</div>
+
+<div class="links">
+    <a href="{% url 'assignments' %}">To Assignments</a>
+</div>
+
+<div class="links">
+    <a href="{% url 'create_player' %}">Create Player</a>
+</div>
 
 <div class="table"><table>
     <tr>
