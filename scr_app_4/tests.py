@@ -24,12 +24,12 @@ class TestClass(TestCase):
     def test_create_delete_assignment(self):
         test_role = Role.objects.create(name='role')
         test_player = Player.objects.create(username='test', current_role=test_role)
-        train_class = TrainClass.objects.create(name='100/0', double_unit=False, diesel, speed, carriages)
+        train_class = TrainClass.objects.create(name='100/0', double_unit=False)
         unit = Unit.objects.get(number='45')
         route = Route.objects.get(id='051')
 
         assignment = TrainAssignment.objects.create(
-            player=player,
+            player=test_player,
             train_class=train_class,
             unit=unit,
             route=route
